@@ -1,0 +1,9 @@
+[Unit]
+Description=Photo frame: new photo every hour 06:00-23:00
+
+[Timer]
+OnCalendar=*-*-* 06..23:00:00
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target

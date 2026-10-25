@@ -1,0 +1,9 @@
+[Unit]
+Description=Photo frame: blank screen at night
+
+[Timer]
+OnCalendar=*-*-* 23:35:00
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,8 @@
+[Unit]
+Description=Photo frame: blank the screen
+
+[Service]
+Type=oneshot
+User=mm
+WorkingDirectory=/home/mm/Projects/personal/photo-frame
+ExecStart=/usr/bin/flock /run/lock/photo-frame.lock /home/mm/.local/bin/uv run --python /home/mm/org-babel-env/bin/python /home/mm/Projects/personal/photo-frame/gallery-clear.py

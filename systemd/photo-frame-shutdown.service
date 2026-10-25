@@ -1,0 +1,15 @@
+[Unit]
+Description=Photo frame: blank the screen on shutdown/reboot
+RequiresMountsFor=/home/mm/Projects/personal/photo-frame
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=mm
+WorkingDirectory=/home/mm/Projects/personal/photo-frame
+ExecStart=/bin/true
+ExecStop=/usr/bin/flock /run/lock/photo-frame.lock /home/mm/.local/bin/uv run --python /home/mm/org-babel-env/bin/python /home/mm/Projects/personal/photo-frame/gallery-clear.py
+TimeoutStopSec=180
+
+[Install]
+WantedBy=multi-user.target
