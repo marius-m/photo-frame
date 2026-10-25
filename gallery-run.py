@@ -5,6 +5,7 @@ import random
 import os
 import sys
 from PIL import Image, ImageOps
+import weather_overlay
 
 sys.path.append(os.path.expanduser('~/Projects/random/RaspberryPi_JetsonNano/python/lib'))
 from waveshare_epd import epd7in3e
@@ -23,6 +24,7 @@ MARGIN_BOTTOM = 8
 # zoom to fill the visible area if that crops at most this fraction of the photo,
 # otherwise show the whole photo with black bars (1.0 = always fill, 0.0 = never crop)
 MAX_CROP = 1.0
+SHOW_WEATHER = True  # current weather in the bottom-left corner (weather_overlay.py)
 BORDER_COLOR = (0, 0, 0)
 RESAMPLING = Image.BICUBIC
 
@@ -63,6 +65,13 @@ fitted = image.resize((round(image.width * scale), round(image.height * scale)),
 # center on the visible area (not the panel, since the margins aren't symmetric)
 canvas.paste(fitted, (round(MARGIN_LEFT + VISIBLE[0] / 2 - fitted.width / 2),
                       round(MARGIN_TOP + VISIBLE[1] / 2 - fitted.height / 2)))
+
+if SHOW_WEATHER:
+    try:
+        weather_overlay.draw_weather(canvas, (MARGIN_LEFT, MARGIN_TOP,
+                                              RESOLUTION[0] - MARGIN_RIGHT, RESOLUTION[1] - MARGIN_BOTTOM))
+    except Exception as e:  # never let weather stop the photo from being drawn
+        print('Weather overlay skipped: {}'.format(e))
 
 epd.init()
 epd.display(epd.getbuffer(canvas))
